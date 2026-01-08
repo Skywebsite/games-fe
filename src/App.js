@@ -13,11 +13,18 @@ import Profile from './pages/Profile';
 
 function App() {
   const [showLoader, setShowLoader] = useState(true);
+  const [showBraveWarning, setShowBraveWarning] = useState(false);
 
   useEffect(() => {
     const id = setTimeout(() => setShowLoader(false), 3500);
+    // Detect Brave browser
+    if (navigator.brave) {
+      setShowBraveWarning(true);
+    }
     return () => clearTimeout(id);
   }, []);
+
+  const dismissBraveWarning = () => setShowBraveWarning(false);
 
   if (showLoader) {
     return (
@@ -38,6 +45,20 @@ function App() {
       <SocketProvider>
         <Router>
           <div className="min-h-screen bg-dark-bg text-dark-text font-sans">
+            {showBraveWarning && (
+              <div className="bg-yellow-600 text-white text-center py-2 px-4 text-sm relative">
+                <span>
+                  Some games may not work properly in Brave. For the best experience, use Chrome.
+                </span>
+                <button
+                  onClick={dismissBraveWarning}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 ml-4 text-white hover:text-gray-200"
+                  aria-label="Dismiss"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
