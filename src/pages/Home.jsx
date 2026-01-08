@@ -99,12 +99,12 @@ const Home = () => {
                                 (categoryParam || '').toLowerCase() === (c.value || '').toLowerCase()
                                     ? 'ring-2 ring-blue-600'
                                     : 'ring-1 ring-black/10'
-                            } bg-white rounded-xl p-3 shadow-md flex items-center gap-3 text-left transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-white/70 active:translate-y-0`}
+                            } bg-white rounded-xl p-3 shadow-md flex items-center justify-center text-left transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-white/70 active:translate-y-0`}
                         >
                             <div className="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center overflow-hidden shrink-0 transition-transform duration-200 ease-out group-hover:scale-110 group-hover:-rotate-2">
                                 <img src={c.image} alt={c.label} className="w-10 h-10 object-contain" />
                             </div>
-                            <div className="text-[10px] sm:text-[11px] font-extrabold tracking-wide uppercase text-gray-900 leading-tight transition-colors duration-200 group-hover:text-blue-700">
+                            <div className="hidden sm:block text-[10px] sm:text-[11px] font-extrabold tracking-wide uppercase text-gray-900 leading-tight transition-colors duration-200 group-hover:text-blue-700 ml-3">
                                 {c.label}
                             </div>
                         </button>
