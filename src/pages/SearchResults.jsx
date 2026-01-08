@@ -22,7 +22,7 @@ const SearchResults = () => {
             try {
                 setLoading(true);
                 setError('');
-                const res = await axios.get(`${API_BASE_URL}/api/games?search=${encodeURIComponent(query.trim())}`);
+                const res = await axios.get(`${API_BASE_URL}/api/games/search?search=${encodeURIComponent(query.trim())}`);
                 setGames(Array.isArray(res.data) ? res.data : []);
             } catch (e) {
                 setError(e?.response?.data?.message || e.message || 'Failed to load search results');

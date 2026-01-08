@@ -31,7 +31,7 @@ const Navbar = () => {
             return;
         }
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL || 'https://games-be.vercel.app'}/api/games?search=${encodeURIComponent(query.trim())}&limit=5`);
+            const res = await axios.get(`${process.env.REACT_APP_API_URL || 'https://games-be.vercel.app'}/api/games/search?search=${encodeURIComponent(query.trim())}&limit=5`);
             setSuggestions(Array.isArray(res.data) ? res.data : []);
             setShowSuggestions(true);
         } catch (e) {
