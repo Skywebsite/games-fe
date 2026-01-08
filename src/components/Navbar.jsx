@@ -8,6 +8,8 @@ const Navbar = () => {
     const { user, logout } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -22,10 +24,44 @@ const Navbar = () => {
         navigate(`/?category=${encodeURIComponent(value)}`);
     };
 
+    const fetchSuggestions = async (query) => {
+        if (!query.trim()) {
+            setSuggestions([]);
+            setShowSuggestions(false);
+            return;
+        }
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_API_URL || 'https://games-be.vercel.app'}/api/games?search=${encodeURIComponent(query.trim())}&limit=5`);
+            setSuggestions(Array.isArray(res.data) ? res.data : []);
+            setShowSuggestions(true);
+        } catch (e) {
+            console.error('Failed to fetch suggestions:', e);
+            setSuggestions([]);
+        }
+    };
+
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+        setSearchQuery(value);
+        if (value.length > 0) {
+            fetchSuggestions(value);
+        } else {
+            setSuggestions([]);
+            setShowSuggestions(false);
+        }
+    };
+
     const handleSearch = (e) => {
         e.preventDefault();
         if (!searchQuery.trim()) return;
+        setShowSuggestions(false);
         navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    };
+
+    const handleSuggestionClick = (suggestion) => {
+        setSearchQuery(suggestion.title);
+        setShowSuggestions(false);
+        navigate(`/search?q=${encodeURIComponent(suggestion.title)}`);
     };
 
     return (
@@ -74,13 +110,31 @@ const Navbar = () => {
                                         type="text"
                                         placeholder="Search..."
                                         value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        onChange={handleSearchChange}
+                                        onFocus={() => searchQuery.length > 0 && setShowSuggestions(true)}
+                                        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                                         className="bg-gray-700 text-gray-200 text-sm rounded-full pl-4 pr-8 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 w-48 transition-width duration-300 focus:w-64"
                                     />
                                     <button type="submit" className="absolute right-3 top-2 text-gray-400 hover:text-white">
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     </button>
                                 </form>
+                                
+                                {/* Suggestions Dropdown */}
+                                {showSuggestions && suggestions.length > 0 && (
+                                    <div className="absolute top-full mt-2 w-64 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50">
+                                        {suggestions.map((suggestion, index) => (
+                                            <button
+                                                key={index}
+                                                type="button"
+                                                onClick={() => handleSuggestionClick(suggestion)}
+                                                className="w-full text-left px-4 py-3 hover:bg-gray-700 text-gray-200 text-sm transition-colors first:rounded-t-lg last:rounded-b-lg"
+                                            >
+                                                {suggestion.title}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

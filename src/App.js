@@ -10,6 +10,7 @@ import Room from './pages/Room';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
+import SearchResults from './pages/SearchResults';
 
 function App() {
   const [showLoader, setShowLoader] = useState(true);
@@ -97,6 +98,7 @@ function App() {
               <Route path="/play/:slug" element={<Play />} />
               <Route path="/multiplayer" element={<Room />} />
               <Route path="/room/:roomCode" element={<div className="text-white text-center mt-10">Room Interface (Coming Soon)</div>} />
+              <Route path="/search" element={<SearchResults />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/profile" element={<Profile />} />
