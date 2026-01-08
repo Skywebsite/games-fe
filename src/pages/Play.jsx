@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useSocket } from '../context/SocketContext';
 import { useAuth } from '../context/AuthContext';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://games-be.vercel.app';
+
 const Play = () => {
     const { slug } = useParams();
     const socket = useSocket();
@@ -19,7 +21,7 @@ const Play = () => {
             try {
                 setLoading(true);
                 setError('');
-                const res = await axios.get(`http://localhost:5000/api/games/${slug}`);
+                const res = await axios.get(`${API_BASE_URL}/api/games/${slug}`);
                 setGame(res.data);
             } catch (e) {
                 setGame(null);
@@ -36,7 +38,7 @@ const Play = () => {
         const recordRecentlyPlayed = async () => {
             if (!token || !game?._id) return;
             try {
-                await axios.post('http://localhost:5000/api/users/recently-played',
+                await axios.post(`${API_BASE_URL}/api/users/recently-played`,
                     { gameId: game._id },
                     {
                         headers: {

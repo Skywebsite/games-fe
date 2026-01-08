@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://games-be.vercel.app';
+
 const Room = () => {
     const [roomCode, setRoomCode] = useState('');
     const [createdRoom, setCreatedRoom] = useState(null);
@@ -22,7 +24,7 @@ const Room = () => {
                 setLoading(true);
                 setError('');
                 const [gamesRes] = await Promise.all([
-                    axios.get('http://localhost:5000/api/games')
+                    axios.get(`${API_BASE_URL}/api/games`)
                 ]);
 
                 setGames(Array.isArray(gamesRes.data) ? gamesRes.data : []);
@@ -44,7 +46,7 @@ const Room = () => {
                 return;
             }
             try {
-                const res = await axios.get('http://localhost:5000/api/rooms/friends-active', {
+                const res = await axios.get(`${API_BASE_URL}/api/rooms/friends-active`, {
                     headers: authHeaders
                 });
                 setFriendsRooms(Array.isArray(res.data) ? res.data : []);
@@ -68,7 +70,7 @@ const Room = () => {
             return;
         }
         try {
-            const res = await axios.post('http://localhost:5000/api/rooms/create',
+            const res = await axios.post(`${API_BASE_URL}/api/rooms/create`,
                 { gameId: selectedGameId },
                 { headers: authHeaders }
             );
@@ -85,7 +87,7 @@ const Room = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:5000/api/rooms/join',
+            await axios.post(`${API_BASE_URL}/api/rooms/join`,
                 { roomCode },
                 { headers: authHeaders }
             );
@@ -98,7 +100,7 @@ const Room = () => {
     const handleJoinFriendRoom = async (code) => {
         setRoomCode(code);
         try {
-            await axios.post('http://localhost:5000/api/rooms/join',
+            await axios.post(`${API_BASE_URL}/api/rooms/join`,
                 { roomCode: code },
                 { headers: authHeaders }
             );

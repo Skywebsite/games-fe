@@ -7,7 +7,7 @@ export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-        const newSocket = io(process.env.REACT_APP_API_URL || 'http://localhost:5000');
+        const newSocket = io(process.env.REACT_APP_API_URL || 'https://games-be.vercel.app');
         setSocket(newSocket);
 
         return () => newSocket.close();

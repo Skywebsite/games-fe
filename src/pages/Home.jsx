@@ -3,6 +3,8 @@ import axios from 'axios';
 import GameCard from '../components/GameCard';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://games-be.vercel.app';
+
 const Home = () => {
     const [games, setGames] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -60,7 +62,7 @@ const Home = () => {
             try {
                 setLoading(true);
                 setError('');
-                const res = await axios.get('http://localhost:5000/api/games');
+                const res = await axios.get(`${API_BASE_URL}/api/games`);
                 const all = Array.isArray(res.data) ? res.data : [];
                 const filtered = categoryParam
                     ? all.filter((g) => (g.category || '').toLowerCase() === categoryParam.toLowerCase())

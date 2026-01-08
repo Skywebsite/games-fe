@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://games-be.vercel.app';
+
 const Profile = () => {
     const { user, token } = useAuth();
     const [profile, setProfile] = useState(null);
@@ -20,7 +22,7 @@ const Profile = () => {
             try {
                 setLoading(true);
                 setError('');
-                const res = await axios.get('http://localhost:5000/api/users/me', {
+                const res = await axios.get(`${API_BASE_URL}/api/users/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
