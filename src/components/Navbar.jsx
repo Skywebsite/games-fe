@@ -7,6 +7,7 @@ import logo from '../assets/logo.png';
 const Navbar = () => {
     const { user, logout } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -19,6 +20,12 @@ const Navbar = () => {
             return;
         }
         navigate(`/?category=${encodeURIComponent(value)}`);
+    };
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (!searchQuery.trim()) return;
+        navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     };
 
     return (
@@ -62,12 +69,18 @@ const Navbar = () => {
                             </div>
 
                             <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder="Search..."
-                                    className="bg-gray-700 text-gray-200 text-sm rounded-full pl-4 pr-8 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 w-48 transition-width duration-300 focus:w-64"
-                                />
-                                <svg className="w-4 h-4 absolute right-3 top-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <form onSubmit={handleSearch}>
+                                    <input
+                                        type="text"
+                                        placeholder="Search..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="bg-gray-700 text-gray-200 text-sm rounded-full pl-4 pr-8 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 w-48 transition-width duration-300 focus:w-64"
+                                    />
+                                    <button type="submit" className="absolute right-3 top-2 text-gray-400 hover:text-white">
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
